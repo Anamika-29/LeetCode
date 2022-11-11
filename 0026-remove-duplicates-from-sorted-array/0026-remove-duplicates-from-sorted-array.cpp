@@ -1,10 +1,13 @@
-class Solution:
-    def removeDuplicates(self, nums: List[int]) -> int:
-        
-        length = 0
-        if len(nums) == 0: return length
-        for i in range(1,len(nums)):
-            if nums[length] < nums[i]:
-                length += 1
-                nums[length] = nums[i]
-        return length+1
+class Solution {
+public:
+     int removeDuplicates(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int left = 0;
+        for(int right =1; right< nums.size(); right++){
+           if(nums[left] != nums[right])
+               left++;
+               nums[left] = nums[right];
+           }
+    return left+1;
+    }
+};
