@@ -1,16 +1,21 @@
-class Solution:
-    def reverseWords(self, s):
-        s = list(" ".join(s.split()))[::-1]
-        i = 0 
-        while i < len(s):
-            start = i 
-            while i < len(s) and not s[i].isspace():
-                i += 1
-            self.reverse(s, start, i-1)
-            i += 1
-        return "".join(s)
-
-    def reverse(self, s, i, j):
-        while i < j:
-            s[i], s[j] = s[j], s[i]
-            i += 1; j -= 1
+class Solution {
+public:
+    string reverseWords(string s) {
+        if(s.size() == 0) return s;
+        stack<string> stack;
+        string result;
+        for(int i=0; i<s.size(); i++) {
+            string word;
+            if(s[i]==' ') continue; //skip spaces
+            while(i<s.size() && s[i]!=' ' ) { //store continuous letters into word
+                word += s[i]; i++;
+            }
+            stack.push(word); //push word to the stack
+        }
+        while(!stack.empty()) {
+            result += stack.top(); stack.pop();
+            if(!stack.empty()) result += " ";
+        }
+        return result;
+    }
+};
