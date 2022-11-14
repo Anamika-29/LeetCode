@@ -1,21 +1,27 @@
-class Solution {
-public:
-    int dfs(vector<vector<int>>&stones,int index,vector<bool>&visited,int&n){
-        visited[index]=true;
-        int result=0;
-        for(int i=0;i<n;i++)
-            if(!visited[i]&&(stones[i][0]==stones[index][0]||stones[i][1]==stones[index][1]))
-                result +=(dfs(stones,i,visited,n) + 1);
-        return result;
-    }
-    int removeStones(vector<vector<int>>&stones) {
-        int n = stones.size();
-        vector<bool>visited(n,0);
-        int result=0;
-        for(int i=0;i<n;i++){
-            if(visited[i]){continue;}
-            result+=dfs(stones,i,visited,n);
-        }
-        return result;
-    }
-};
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        n = len(stones)
+        visited = [False]*n
+        rows = defaultdict(list)
+        cols = defaultdict(list)
+        ans = 0
+        for i,point in enumerate(stones):
+            rows[point[0]].append(i)
+            cols[point[1]].append(i)
+        
+        def dfs(node):
+            visited[node] = True
+            count = 1
+            for x in rows[stones[node][0]]:
+                if visited[x] == False:
+                    count += dfs(x)
+            for x in cols[stones[node][1]]:
+                if visited[x] == False:
+                    count += dfs(x)
+            return count
+            
+        for i in range(n):
+            if visited[i] == False:
+                size = dfs(i)
+                ans += size-1
+        return ans
