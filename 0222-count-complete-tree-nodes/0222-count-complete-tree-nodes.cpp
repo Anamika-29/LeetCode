@@ -1,23 +1,32 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-        # @param {TreeNode} root
-        # @return {integer}
-        def countNodes(self, root):
-            if not root:
-                return 0
-            leftDepth = self.getDepth(root.left)
-            rightDepth = self.getDepth(root.right)
-            if leftDepth == rightDepth:
-                return pow(2, leftDepth) + self.countNodes(root.right)
-            else:
-                return pow(2, rightDepth) + self.countNodes(root.left)
-    
-        def getDepth(self, root):
-            if not root:
-                return 0
-            return 1 + self.getDepth(root.left)
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+     int countNodes(TreeNode* root) {
+
+        if(!root) return 0;
+
+        int hl=0, hr=0;
+
+        TreeNode *l=root, *r=root;
+
+        while(l) {hl++;l=l->left;}
+
+        while(r) {hr++;r=r->right;}
+
+        if(hl==hr) return pow(2,hl)-1;
+
+        return 1+countNodes(root->left)+countNodes(root->right);
+
+    }
+
+};
