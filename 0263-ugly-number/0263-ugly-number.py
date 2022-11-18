@@ -1,9 +1,8 @@
-class Solution {
-public:
-    vector<int> primes = {2, 3, 5};
-    bool isUgly(int n) {
-        if (n < 1) return false;
-        for (int p: primes) while (n % p == 0) n /=p;
-        return n == 1;
-    }
-};
+class Solution:
+    def isUgly(self, num: int) -> bool:
+        if num == 0: return False
+        while num % 5 == 0: num /= 5
+        while num % 3 == 0: num /= 3
+        while num % 2 == 0: num /= 2
+        return num == 1
+		
