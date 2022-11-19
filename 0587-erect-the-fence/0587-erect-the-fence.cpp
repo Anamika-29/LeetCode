@@ -1,14 +1,32 @@
-class Solution:
-     def outerTrees(self, trees: List[List[int]]) -> List[List[int]]:
-        def compare_slopes(p1, p2, p3):
-            x1, y1 = p1
-            x2, y2 = p2
-            x3, y3 = p3
-            return (y3-y2)*(x2-x1) - (y2-y1)*(x3-x2) 
-        upper, lower  = [], []
-        for point in sorted(trees):
-            while len(lower) >= 2 and compare_slopes(lower[-2], lower[-1], point) < 0: lower.pop()
-            while len(upper) >= 2 and compare_slopes(upper[-2], upper[-1], point) > 0: upper.pop()
-            lower.append(tuple(point))
-            upper.append(tuple(point))   
-        return list(set(lower + upper))   
+class Solution {
+public:
+     vector<vector<int>> outerTrees(vector<vector<int>>& trees) {
+      int n = trees.size();
+      if (n <= 3) return trees;
+      sort(trees.begin(), trees.end(), [](const vector<int>& a, const vector<int>& b) {
+        return a[0] < b[0] || (a[0] == b[0] && a[1] < b[1]);
+      });
+      vector<vector<int>> hull;
+      for (int i = 0; i < n; ++i) {
+        while (hull.size() >= 2 && cross(hull[hull.size() - 2], hull.back(), trees[i]) < 0) {
+          hull.pop_back();
+        }
+        hull.push_back(trees[i]);
+      }
+      hull.pop_back();
+      for (int i = n - 1; i >= 0; --i) {
+        while (hull.size() >= 2 && cross(hull[hull.size() - 2], hull.back(), trees[i]) < 0) {
+          hull.pop_back();
+        }
+        hull.push_back(trees[i]);
+      }
+      hull.pop_back();
+      sort(hull.begin(), hull.end());
+      hull.erase(unique(hull.begin(), hull.end()), hull.end());
+      return hull;
+    }
+private:
+    int cross(const vector<int>& a, const vector<int>& b, const vector<int>& c) {
+      return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+    }
+};
