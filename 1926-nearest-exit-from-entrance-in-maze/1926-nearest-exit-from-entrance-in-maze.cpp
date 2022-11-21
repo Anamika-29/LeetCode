@@ -1,22 +1,42 @@
-class Solution:
-    def nearestExit(self, maze: List[List[str]], entrance: List[int]) -> int:
-        dirs = [(0,1),(0,-1),(1,0),(-1,0)]
-        entrance = (entrance[0],entrance[1])
-        q = deque([entrance])
-        visited = set()
-        visited.add(entrance)
-        step = 0
-        while q:
-            stepLength = len(q)
-            for i in range(stepLength): # here, we can use length of the deque to iterate through level by level
-                node = q.popleft()
-                if node[0] == 0 or node[0] == len(maze) -1 or node[1] == 0 or node[1] == len(maze[0]) -1 :
-                    if maze[node[0]][node[1]] == '.' and (node[0],node[1]) != entrance:
-                        return step
-                for d in dirs:
-                    newD = (node[0] + d[0], node[1] + d[1])
-                    if newD not in visited and 0<=newD[0]<len(maze) and 0<=newD[1]<len(maze[0]) and maze[newD[0]][newD[1]] == '.': # only add valid nodes to the queue!
-                        visited.add(newD) # mark it as visited, so we don't loop forever
-                        q.append(newD)
-            step += 1 # after we finish with a level, increment step by one
-        return -1
+class Solution {
+public:
+    int m,n;
+    int dx[4] = {0,0,1,-1};
+    int dy[4] = {1,-1,0,0};
+    bool isBorder(int i,int j){
+        return (i==0 || i==m-1 || j == 0 || j == n-1);
+    }
+    
+    bool valid(int r,int c){
+        return (r>=0 && c>=0 && r<m && c<n);
+    }
+    
+    int nearestExit(vector<vector<char>>& maze, vector<int>& ent) {
+        m = maze.size() , n=maze[0].size();
+        if(isBorder(ent[0] , ent[1]))  
+            maze[ent[0]][ent[1]] = '+';
+        int ans = 0;
+        queue<pair<int,int>> q;
+        q.push({ent[0],ent[1]});
+        while(!q.empty()){
+            int size = q.size();
+            for(int i=0;i<size;i++){
+                auto top = q.front();
+                q.pop();
+                int x = top.first , y = top.second;
+                if(maze[x][y] != '+' && isBorder(x,y))
+                    return ans;
+                for(int j=0;j<4;j++){
+                    int r = x + dx[j];
+                    int c = y + dy[j];
+                    if(valid(r,c) && maze[r][c]=='.'){
+                        q.push({r,c});
+                        maze[r][c] = '*';
+                    }
+                }
+            }
+            ans++;
+        }
+        return -1;
+    }
+};
