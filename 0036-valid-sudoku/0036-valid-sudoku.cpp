@@ -1,14 +1,23 @@
-class Solution:
-    def isValidSudoku(self, board: List[List[str]]) -> bool:
-        boardMap = collections.defaultdict(list)
-        for x in range(9):
-            for y in range(9):
-                char = board[x][y]
-                if char != '.': 
-                    if char in boardMap:
-                        for pos in boardMap[char]:
-                            if (pos[0]== x) or (pos[1] == y) or (pos[0]//3 == x//3 and pos[1]//3 == y//3):
-                                return False
-                    boardMap[char].append((x,y))
-   
-        return True
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        vector<set<int>> rows(9), cols(9), blocks(9);
+        
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                
+                if (board[i][j] == '.') continue;
+                
+                int curr = board[i][j] - '0';
+                if (rows[i].count(curr) || cols[j].count(curr) || blocks[(i/3)*3+j/3].count(curr)) 
+                    return false;
+                
+                rows[i].insert(curr);
+                cols[j].insert(curr);
+                blocks[(i/3)*3+j/3].insert(curr);
+            }
+        }
+        
+        return true;
+    }
+};
