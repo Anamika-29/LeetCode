@@ -1,26 +1,14 @@
-class Solution {
-public:
-    vector<vector<int>> findWinners(vector<vector<int>>& matches) {
-
-    unordered_set<int> u;
-    map<int,int> m;
-    int n=matches.size();
-    for(int i=0;i<n;i++){
-        u.insert(matches[i][1]);
-        u.insert(matches[i][0]);
-        m[matches[i][1]]++;
-    }
-    vector<vector<int>> ans(2);
-    n=u.size();
-    
-    for(auto i=u.begin();i!=u.end();i++){
-        if(!m.count(*i))    ans[0].push_back(*i);
-        else if(m[*i]==1)   ans[1].push_back(*i);
-    }
-    
-    sort(ans[1].begin(),ans[1].end());
-    sort(ans[0].begin(),ans[0].end());
-    
-    return ans;
-}
-};
+class Solution:
+    def findWinners(self, matches: List[List[int]]) -> List[List[int]]:
+        winners, losers, table = [], [], {}
+        for winner, loser in matches:
+            # map[key] = map.get(key, 0) + change . This format ensures that KEY NOT FOUND error is always prevented.
+            # map.get(key, 0) returns map[key] if key exists and 0 if it does not.
+            table[winner] = table.get(winner, 0)  # Winner
+            table[loser] = table.get(loser, 0) + 1
+        for k, v in table.items(): # Player k with losses v
+            if v == 0:
+                winners.append(k) # If player k has no loss ie v == 0
+            if v == 1:
+                losers.append(k) # If player k has one loss ie v == 1
+        return [sorted(winners), sorted(losers)] # Problem asked to return sorted arrays.
