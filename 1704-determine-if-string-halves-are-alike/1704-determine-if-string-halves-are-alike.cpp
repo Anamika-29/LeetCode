@@ -1,9 +1,13 @@
-vowels = "aeiouAEIOU"
+string vowels = "aeiouAEIOU";
 
-class Solution:
-    def halvesAreAlike(self, S: str) -> bool:
-        mid, ans = len(S) // 2, 0
-        for i in range(mid):
-            if S[i] in vowels: ans += 1
-            if S[mid+i] in vowels: ans -=1
-        return ans == 0
+class Solution {
+public:
+    bool halvesAreAlike(string S) {
+        int mid = S.size() / 2, ans = 0;
+        for (int i = 0, j = mid; i < mid; i++, j++) {
+            if (~vowels.find(S[i])) ans++;
+            if (~vowels.find(S[j])) ans--;
+        }
+        return ans == 0;
+    }
+};
