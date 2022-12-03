@@ -1,20 +1,20 @@
-class Solution:
-    def frequencySort(self, s: str) -> str:
+class Solution {
+public:
+    string frequencySort(string s) {
+        unordered_map<char, int> freq;
+        for (auto a : s) freq[a]++;
         
-        ans_str = ''
-        # Find unique characters
-        characters = set(s)
+        priority_queue<pair<int, char>> q;
+        for (auto [a, frq] : freq) q.push({frq, a});
         
-        counts = []
-        # Count their frequency
-        for i in characters:
-            counts.append([i,s.count(i)])
+        string res;
+        pair<int, char> curr;
+        while (!q.empty()) {
+            curr = q.top();
+            q.pop();
+            res += string(curr.first, curr.second);
+        }
         
-		# Sort characters according to their frequency
-        counts = sorted(counts, key= lambda x: x[1], reverse = True)
-        
-		# Generate answer string by multiplying frequency count with the character
-        for i,j in counts:
-            ans_str += i*j
-        
-        return ans_str
+        return res;
+    }
+};
