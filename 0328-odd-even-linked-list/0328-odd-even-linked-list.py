@@ -1,25 +1,17 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
-class Solution {
-public:
-    ListNode* oddEvenList(ListNode* head) {
-        if (!head) return nullptr;
-        ListNode *odd = head, *even = head->next, *evenHead = even;
-        while (odd->next && even->next) {
-            odd->next = even->next;
-            odd = odd->next;
-            even->next = odd->next;
-            even = even->next;
-        }
-        odd->next = evenHead;
-        return head;
-    }
-};
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def oddEvenList(self, head):
+        dummy1 = odd = ListNode(0)
+        dummy2 = even = ListNode(0)
+        while head:
+            odd.next = head
+            even.next = head.next
+            odd = odd.next
+            even = even.next
+            head = head.next.next if even else None
+        odd.next = dummy2.next
+        return dummy1.next
