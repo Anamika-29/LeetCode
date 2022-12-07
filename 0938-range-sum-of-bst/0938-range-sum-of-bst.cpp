@@ -1,12 +1,17 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def rangeSumBST(self, root: TreeNode, L: int, R: int) -> int:
-        if root == None: return 0
-        if root.val > R: return self.rangeSumBST(root.left,L,R)
-        if root.val < L: return self.rangeSumBST(root.right,L,R)
-        return root.val + self.rangeSumBST(root.left,L,R) + self.rangeSumBST(root.right,L,R)    
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int rangeSumBST(TreeNode* root, int l, int h) {
+         return root==NULL  ?  0  :   ((root->val>h || root->val<l)? 0 : root->val)   +   rangeSumBST(root->left,l,h)  +  rangeSumBST(root->right,l,h);
+    }
+};
