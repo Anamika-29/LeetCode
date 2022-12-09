@@ -1,23 +1,22 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
-        def dfs(root, mn, mx):
-            # Base Case: If we reach None, just return 0 in order not to affect the result
-            if not root: return 0
-            
-			# The best difference we can do using the current node can be found:
-            res = max(abs(root.val - mn), abs(root.val - mx))
-			
-			# Recompute the new minimum and maximum taking into account the current node
-            mn, mx = min(mn, root.val), max(mx, root.val)
-			
-			# Recurse left and right using the newly computated minimum and maximum
-            return max(res, dfs(root.left, mn, mx), dfs(root.right, mn, mx))
-        
-        # Initialize minimum `mn` and maximum `mx` equals value of given root
-        return dfs(root, root.val, root.val)
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxAncestorDiff(TreeNode* root, int mini = INT_MAX, int maxi = INT_MIN) {
+        // base case
+        if (!root) return (maxi - mini);
+        // update mini and maxi
+        mini = min(mini, root->val), maxi = max(maxi, root->val);
+        // finding the maximum distance we would like to find by going left and right
+        return max(maxAncestorDiff(root->left, mini, maxi), maxAncestorDiff(root->right, mini, maxi));
+    }
+};
