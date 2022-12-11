@@ -1,22 +1,31 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def maxPathSum(self, root):
-        self.res = -sys.maxsize-1
-        self.oneSideSum(root)
-        return self.res
-
-    # compute one side maximal sum, 
-    # (root+left children, or root+right children),
-    # root is the included top-most node 
-    def oneSideSum(self, root):
-        if not root:
-            return 0
-        l = max(0, self.oneSideSum(root.left))
-        r = max(0, self.oneSideSum(root.right))
-        self.res = max(self.res, l+r+root.val)
-        return max(l, r)+root.val
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxi = INT_MIN;
+public:
+    int maxPathSum(TreeNode* root) {
+        depth(root);
+        return maxi;
+    }
+    
+    int depth(TreeNode* root){
+        if(root == NULL) return 0;
+        
+        int lh = max(0,depth(root->left));
+        int rh = max(0,depth(root->right));
+        
+        maxi = max(maxi , root->val + lh + rh);
+        
+        return root->val + max(lh,rh);
+    }
+};
