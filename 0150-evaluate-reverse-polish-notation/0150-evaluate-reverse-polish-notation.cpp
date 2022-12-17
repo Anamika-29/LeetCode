@@ -1,24 +1,29 @@
-class Solution:
-    def evalRPN(self, tokens: List[str]) -> int:
-        stack = []
-        while len(tokens) > 0:
-            toke = tokens.pop(0)
-            if toke == "+":
-                first = stack.pop()
-                second = stack.pop()
-                stack.append(second+first)
-            elif toke == "-":
-                first = stack.pop()
-                second = stack.pop()
-                stack.append(second-first) # The order of numbers is important
-            elif toke == "*":
-                first = stack.pop()
-                second = stack.pop()
-                stack.append(second*first)
-            elif toke == "/":
-                first = stack.pop()
-                second = stack.pop()
-                stack.append(int(float(second)/first)) # evaluates to a 0 with the 6/-132 scenario (as required).
-            else:
-                stack.append(int(toke))
-        return stack.pop()
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<long long int> s ;
+        for(auto &i:tokens)
+        { 
+            if(i == "+" || i == "-" || i == "*" || i == "/") // operators 
+            {
+                long long int op1 = s.top() ; 
+                s.pop() ;
+                long long int op2 = s.top() ; 
+                s.pop() ;
+                if(i == "+") 
+                    op1 = op2 + op1 ;
+                if(i == "-") 
+                    op1 = op2 - op1 ;
+                if(i == "*") 
+                    op1 = op2*op1 ; 
+                if(i == "/") 
+                    op1 = op2/op1 ;  
+                s.push(op1) ;
+            }
+            else 
+                s.push(stoll(i)) ; // number -> need to convert from str to int
+        }    
+        return s.top() ; 
+
+    }
+};
