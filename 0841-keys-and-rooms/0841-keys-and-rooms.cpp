@@ -1,12 +1,23 @@
-class Solution:
-       def canVisitAllRooms(self, R: List[List[int]]) -> bool:
-        vis, stack, count = [False for _ in range(len(R))], [0], 1
-        vis[0] = 1
-        while stack:
-            keys = R[stack.pop()]
-            for k in keys:
-                if not vis[k]:
-                    stack.append(k)
-                    vis[k] = True
-                    count += 1
-        return len(R) == count
+class Solution {
+public:
+    void dfs(vector<vector<int>> &graph, int s, vector<bool> &vis){
+        vis[s] = true;
+        for(int i = 0; i < graph[s].size(); i++){
+            if(!vis[graph[s][i]]){
+                dfs(graph, graph[s][i], vis);
+            }
+        }
+    }
+
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        int i, n=rooms.size();
+        vector<bool> vis(n, false);
+        dfs(rooms, 0, vis);
+        for(i = 0; i < n; i++){
+            if(!vis[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+};
