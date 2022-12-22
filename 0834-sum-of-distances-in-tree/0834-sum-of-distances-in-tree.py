@@ -1,36 +1,34 @@
-class Solution {
-public:
-    vector<unordered_set<int>> tree;
-    vector<int> res, count;
-
-    vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
-        tree.resize(N);
-        res.assign(N, 0);
-        count.assign(N, 1);
-        for (auto e : edges) {
-            tree[e[0]].insert(e[1]);
-            tree[e[1]].insert(e[0]);
-        }
-        dfs(0, -1);
-        dfs2(0, -1);
-        return res;
-
-    }
-
-    void dfs(int root, int pre) {
-        for (auto i : tree[root]) {
-            if (i == pre) continue;
-            dfs(i, root);
-            count[root] += count[i];
-            res[root] += res[i] + count[i];
-        }
-    }
-
-    void dfs2(int root, int pre) {
-        for (auto i : tree[root]) {
-            if (i == pre) continue;
-            res[i] = res[root] - count[i] + count.size() - count[i];
-            dfs2(i, root);
-        }
-    }
-};
+class Solution:
+    def sumOfDistancesInTree(self, n: int, edges: List[List[int]]) -> List[int]:
+        g = defaultdict(list)
+        for x,y in edges:
+            g[x].append(y)
+            g[y].append(x)
+            
+        ans = 0
+        subtree = {}
+        
+        def dfs(node, prev, depth):
+            total = 1
+            nonlocal ans
+            ans+=depth
+            for child in g[node]:
+                if child == prev:
+                    continue
+                total+=dfs(child, node, depth + 1)
+            subtree[node] = total
+            return total
+        
+        dfs(0, None, 0)
+        res = [0] * n
+        res[0] = ans
+        
+        def dfs2(node, prev):
+            for child in g[node]:
+                if child == prev:
+                    continue
+                res[child] = res[node] - subtree[child] + (n-subtree[child])
+                dfs2(child, node)
+                
+        dfs2(0, None)
+        return res
