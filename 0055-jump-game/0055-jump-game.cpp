@@ -1,15 +1,15 @@
-class Solution(object):
-    def canJump(self, nums):
-        # Take curr variable to keep the current maximum jump...
-        curr = nums[0]
-        # Traverse all the elements through loop...
-        for i in range(1,len(nums)):
-            # If the current index 'i' is less than current maximum jump 'curr'...
-            # It means there is no way to jump to current index...
-            # so we should return false...
-            if curr == 0:
-                return False
-            curr -= 1
-            # Update the current maximum jump...
-            curr = max(curr, nums[i])       # It’s possible to reach the end of the array...
-        return True
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int i, minjump = 0;
+        for(i = nums.size()-2; i >= 0; i--){
+            minjump++;
+            if(nums[i] >= minjump)
+			    minjump = 0;
+        }
+        if(minjump == 0) 
+		    return true;
+        else 
+		    return false;
+    }
+};
