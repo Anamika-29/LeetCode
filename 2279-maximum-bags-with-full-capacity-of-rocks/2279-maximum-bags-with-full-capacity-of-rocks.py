@@ -1,13 +1,14 @@
-class Solution {
-public:
-    int maximumBags(vector<int>& capacity, vector<int>& rocks, int k) {
-        vector<int> count;
-        int n = rocks.size(), i;
-        for (int i = 0; i < n; ++i) 
-            count.push_back(capacity[i] - rocks[i]);
-        sort(count.begin(), count.end());
-        for (i = 0; i < n && k >= count[i]; ++i)
-            k -= count[i];
-        return i;
-    }
-};
+class Solution:
+    def maximumBags(self, capacity: List[int], rocks: List[int], additionalRocks: int) -> int:
+        dif=[capacity[i]-rocks[i] for i in range(len(rocks))]
+        dif.sort()
+        ct=0
+        for i in range(len(dif)):
+            if additionalRocks==0:
+                break
+            if additionalRocks>=dif[i]:
+                ct+=1
+                additionalRocks-=dif[i]
+            else:
+                break
+        return ct
