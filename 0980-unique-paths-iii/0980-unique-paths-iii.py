@@ -1,35 +1,24 @@
-class Solution {
-public:
-     int res = 0, empty = 1;
-    void dfs(vector<vector<int>>& grid, int x, int y, int count) {
-        if (x < 0 || x >= grid.size() || y < 0 || y >= grid[0].size() || grid[x][y] == -1) return;
-        
-        if (grid[x][y] == 2) {
-            if(empty == count) res++; 
-            return;
-        }
-        
-        grid[x][y] = -1;
-        
-        dfs(grid, x+1, y, count+1);
-        dfs(grid, x-1, y, count+1);
-        dfs(grid, x, y+1, count+1);
-        dfs(grid, x, y-1, count+1);
-        
-        grid[x][y] = 0;
-        
-    }
-    
-    int uniquePathsIII(vector<vector<int>>& grid) {
-        int start_x, start_y;
-        for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[0].size(); j++) {
-                if (grid[i][j] == 1) start_x = i, start_y = j;
-                else if (grid[i][j] == 0) empty++;
-            }
-        }
-        
-        dfs(grid, start_x, start_y, 0);
-        return res;
-    }
-};
+class Solution:
+    def uniquePathsIII(self, grid: list[list[int]]) -> int:
+
+        M, N = range(len(grid)), range(len(grid[0]))
+
+        zeros = sum(row.count(0) for row in grid)       # count the zeros to ensure all cells visited
+        start = tuple((r,c) for r in M for c in N       # find start in grid
+                           if grid[r][c] == 1)[0]
+        self.ans = 0
+
+        def dfs(row, col, zeros):
+            grid[row][col] = 3                          # change 0 to 3 to avoid returning
+
+            for dr, dc in ((-1,0),(0,-1),(1,0),(0,1)):  # explore the grid recursively
+                R, C = row+dr, col+dc
+                if R in M and C in N:
+                    if grid[R][C] == 0: dfs(R, C, zeros-1)
+                    if grid[R][C] == 2 and zeros == 0: self.ans += 1
+
+            grid[row][col] = 0                          # change back
+            return
+
+        dfs(*start, zeros)
+        return self.ans
