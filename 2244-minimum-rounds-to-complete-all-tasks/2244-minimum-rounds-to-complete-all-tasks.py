@@ -1,14 +1,4 @@
-class Solution {
-public:
-    int minimumRounds(vector<int>& A) {
-        unordered_map<int, int> count;
-        int res = 0, freq1;
-        for (int a: A)
-            ++count[a];
-        for (auto& it: count) {
-            if (it.second == 1) return -1;
-            res += (it.second + 2) / 3;
-        }
-        return res;
-    }
-};
+class Solution:
+    def minimumRounds(self, tasks):
+        freq = Counter(tasks).values()
+        return -1 if 1 in freq else sum((a + 2) // 3 for a in freq)
