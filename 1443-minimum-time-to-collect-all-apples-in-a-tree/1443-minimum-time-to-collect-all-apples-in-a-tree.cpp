@@ -1,18 +1,23 @@
-class Solution:
-    def minTime(self, n: int, edges: list[list[int]], hasApple: list[bool]) -> int:
-                          
-        seen, g = set(), defaultdict(list)
-
-        for a,b in edges: 
-            g[a].append((b))  ;  g[b].append((a))
-           
-        def dfs(node: int)->int:
-            seen.add(node)    
-  
-            ans = sum(dfs(n) for n in g[node] if n not in seen) 
- 
-            if not ans and not hasApple[node]: return 0
-
-            return ans+2           
-
-        return max (0,dfs(0)-2)
+class Solution {
+public:
+    vector<vector<int>> adjList;
+    int dfs(vector<bool>& hasApple,int node,int d,int prev)
+    {
+        int result=0,temp;
+        for(int &i:adjList[node])
+	    if(i!=prev)
+	    {
+	        temp=dfs(hasApple,i,d+1,node);
+	        if(temp) result+=temp-d;
+	    }
+        return result||hasApple[node]?result+d:0; 
+        
+    }
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) 
+    {
+        adjList.resize(n);
+        for(vector<int> &e:edges)
+            adjList[e[0]].push_back(e[1]),adjList[e[1]].push_back(e[0]);
+        return dfs(hasApple,0,0,-1)*2;
+    }
+};
