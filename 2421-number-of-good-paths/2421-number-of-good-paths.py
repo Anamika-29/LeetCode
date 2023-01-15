@@ -1,34 +1,40 @@
-class Solution {
-public:
-	int find(vector<int>& y,int i) {
-		if(i==y[i]) return i;
-		y[i]=find(y,y[i]);
-		return y[i];
-	}
-	int numberOfGoodPaths(vector<int>& vals, vector<vector<int>>& edges) {
-        int n = vals.size(),m=edges.size(),ans=0;
-		vector<vector<int>> x(n);
-		vector<int> y(n);
-		for(int i=0;i<n;i++){
-			y[i]=i;
-			x[i]={vals[i],1};
-		}
-        sort(edges.begin(),edges.end(),[&](vector<int>& a,vector<int>& b){
-	    	return max(vals[a[0]],vals[a[1]])<max(vals[b[0]],vals[b[1]]);
-		});
-		for(int i=0;i<m;i++){
-			int a=find(y,edges[i][0]);
-			int b=find(y,edges[i][1]);
-			if(x[a][0]!=x[b][0]){
-				if(x[a][0]>x[b][0]) y[b]=a;
-				else y[a]=b;
-			}
-			else{
-				y[a]=b;
-				ans+=x[a][1]*x[b][1];
-				x[b][1]+=x[a][1];
-			}
-		}
-		return ans+n;
-	}
-};
+class Solution:
+    def numberOfGoodPaths(self, vals: List[int], edges: List[List[int]]) -> int:
+        n = len(vals)
+        # each node is a good path
+        ans = n
+        # sort by vals
+        edges.sort(key=lambda x: max(vals[x[0]], vals[x[1]]))
+        
+        # dsu
+        cnt = [1] * n
+        root = [i for i in range(n)]
+        def get(x):
+            # recursively get the root element
+            if x == root[x]:
+                return x 
+            else:
+                root[x] = get(root[x])
+                return root[x]
+        
+        # iterate each edge
+        for x, y in edges:
+            # get the root of x
+            x = get(x)
+            # get the root of y
+            y = get(y)
+            # if their vals are same
+            if vals[x] == vals[y]:
+                # then there would be cnt[x] * cnt[y] good paths
+                ans += cnt[x] * cnt[y]
+                # unite them
+                root[x] = y
+                # add the count of x to that of y
+                cnt[y] += cnt[x]
+            elif vals[x] > vals[y]:
+                # unite them
+                root[y] = x
+            else:
+                # unite them
+                root[x] = y
+        return ans
