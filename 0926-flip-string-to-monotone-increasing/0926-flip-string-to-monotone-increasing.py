@@ -1,20 +1,14 @@
-class Solution
-{
-public:
-    int minFlipsMonoIncr(string S)
-    {
-        int count_flip = 0, count_one = 0;
-        for (auto i : S)
-        { 
- //keep track of all one (we will use count_one in else condition if we need)  
-//if we want flip one into 0
-            if (i == '1')
-                count_one++;
-            else{
-                count_flip++;
-            count_flip = min(count_flip, count_one);
-            }
-        }
-        return count_flip;
-    }
-};
+class Solution:
+    def minFlipsMonoIncr(self, s: str) -> int:
+
+        ones, ans = 0, 0                    # Example: s = "010110"
+                                            #
+        for num in s:                       #  num    ones   ans  
+                                            #  ––––   ––––   ––––  
+            if num =='1': ones += 1         #    0      0     0
+                                            #    1      1     0
+            elif ones:                      #    0      0     1
+                ones -= 1                   #    1      1     1
+                ans += 1                    #    1      2     1
+                                            #    0      1     2
+        return ans
