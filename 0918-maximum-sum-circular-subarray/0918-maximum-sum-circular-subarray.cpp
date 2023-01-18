@@ -1,28 +1,15 @@
-class Solution:
-    def maxSubarraySumCircular(self, A: List[int]) -> int:
-        
-        array_sum = 0
-        
-        local_min_sum, global_min_sum = 0, float('inf')
-        local_max_sum, global_max_sum = 0, float('-inf')
-        
-        for number in A:
-            
-            local_min_sum = min( local_min_sum + number, number )
-            global_min_sum = min( global_min_sum, local_min_sum )
-            
-            local_max_sum = max( local_max_sum + number, number )
-            global_max_sum = max( global_max_sum, local_max_sum )
-            
-            array_sum += number
-        
-        
-        
-        # global_max_sum denotes the maximum subarray sum without crossing boundary
-        # arry_sum - global_min_sum denotes the maximum subarray sum with crossing boundary
-        
-        if global_max_sum > 0:
-            return max( array_sum - global_min_sum, global_max_sum )
-        else:
-            # corner case handle for all number are negative
-            return global_max_sum
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& A) {
+        int total_sum=0,curr_sum1=0,curr_sum2=0,mxsum_subary=INT_MIN,minsum_subary=INT_MAX;   
+        for(auto i:A)
+        {
+            total_sum+=i; curr_sum1+=i; curr_sum2+=i;
+            mxsum_subary=max(mxsum_subary,curr_sum1);
+            if(curr_sum1<0) curr_sum1=0;
+           minsum_subary=min(curr_sum2,minsum_subary);
+            if(curr_sum2>0) curr_sum2=0;
+        }
+        return (total_sum==minsum_subary)?mxsum_subary:max(mxsum_subary,total_sum-minsum_subary);  
+    }
+};
