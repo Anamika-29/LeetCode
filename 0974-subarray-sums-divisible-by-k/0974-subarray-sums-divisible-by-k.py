@@ -1,16 +1,11 @@
-class Solution {
-public:
-    int subarraysDivByK(vector<int>& nums, int k) {
-        int n = nums.size();
-        vector<int> sums(k, 0);
-        sums[0]++;
-        int cnt = 0;
-        int currSum = 0;
-        for(int i = 0; i<n; i++) {
-            currSum = (currSum + nums[i]%k + k)%k;
-            cnt += sums[currSum];
-            sums[currSum]++;
-        }
-        return cnt;
-    }
-};
+class Solution:
+    def subarraysDivByK(self, A: List[int], k: int) -> int:
+        dic = collections.defaultdict(int)
+        dic[0] = 1
+        ans = 0
+        presum = 0
+        for num in A:
+            presum += num
+            ans += dic[presum%k]
+            dic[presum%k] += 1
+        return ans
